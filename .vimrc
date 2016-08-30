@@ -1,7 +1,10 @@
 """"""""""""""""""""""""
 ""Start of my Settings""
 """"""""""""""""""""""""
-"" My options
+
+""""""""""""""""""""""""
+""General Settings""""""
+""""""""""""""""""""""""
 set nocompatible
 set ai
 set ic
@@ -9,6 +12,9 @@ set ruler
 set ts=4
 set sw=4
 set bs=2
+set history=1000
+set clipboard=unnamedplus,autoselect
+set completeopt=menuone,menu,longest
 set nobackup 
 set backspace=indent,eol,start
 set matchpairs+=<:>
@@ -17,6 +23,8 @@ set nowrap
 set number
 set showmode
 set smartindent
+set mouse=a
+set smarttab
 "set autoindent
 set shortmess=a
 set clipboard=unnamed
@@ -26,9 +34,16 @@ set tabstop=2
 set shiftwidth=2
 " Set font
 set gfn=Lucida_Console:h8:b:cANSI
+set wildmode=longest,list,full
+set wildmenu
+set completeopt+=longest
 
-" Assemble z80 program with assemble.py
-nmap <Leader>asm python ~/forth/assemble.py test.asm
+" allow buffers to contain unsaved changes when not in use
+set hidden
+
+set t_Co=256
+set cmdheight=1
+
 " Set colors
 colorscheme desert
 
@@ -48,6 +63,12 @@ endif
 "" Search 
 set smartcase
 set incsearch
+
+" set runtimepath=~/_vim,$VIMRUNTIME
+
+""""""""""""""""""""""""""""""""
+""General Keymap Settings"""""""
+""""""""""""""""""""""""""""""""
 nmap <Leader>h :noh<CR> 
 
 " No beeping or screenflash
@@ -58,22 +79,8 @@ nmap <C-[> <C-L>
 " Select all and yank all into clipboard
 nmap <Leader>a ggVG
 nmap <Leader>ay ggVG"+y<CR>
-" Clear line
-nmap <Leader>d S<Esc>
-" Insert space before and after character
-nmap <Leader>i i <esc>wa <esc>
-" Programming constructs
-imap ,for for(int i = 0; i < <Esc>mai; i++) {<CR>}<Esc>`aa 
-imap ,if <Esc>mzaif( ){<CR> <CR>}<Esc>`z3li
-imap ,wh <Esc>mzawhile( ){<CR> <CR>}<Esc>`zwla
-imap ,cl public class <C-R>%<Esc>dF.xa{<CR> <CR>public <C-R>%<Esc>dF.xa(){<CR> <CR>}<CR> <CR>}<Esc>
-imap ,sys System.out.println();<Left><Left>
-" Run java program
-nmap <Leader>ja !javac <C-R>% && java %<
-" Java open curly brace
-imap )<space>{ )<space>{<cr>}<esc>O
-" Save on f4
-nmap <F4> :w<cr>
+" Save on f1
+nmap <F1> :w<cr>
 " Insert mode movement
 imap <C-H> <Left>
 imap <C-J> <Down>
@@ -82,15 +89,11 @@ imap <C-L> <Right>
 " Make line without entering insert mode 
 nmap <Leader>o o<Esc>
 nmap <Leader>O O<Esc>
-" Make line in insert mode
-imap ,o <Esc>o
-imap ,O <Esc>O
-" Mimics ctrl-v 
-nmap <Leader>v "+p 
-nmap <Leader>V "+P 
 " Tab over and back in normal mode 
 nmap <S-Tab> <gV
 nmap <Tab> >gV
+" quicker tab ball
+nmap <Leader>b :tab ball<CR>
 " Unmapping for windows 
 " unmap <C-A> 
 " unmap <C-V> 
@@ -105,91 +108,199 @@ nmap <Leader>> :tablast<CR>
 nmap <Leader>< :tabfirst<CR>
 nmap <F8> :tabp<CR>
 nmap <F9> :tabn<CR>
-nmap <Leader>! F<i<!--<Esc>/\/><CR>la--><Esc><Leader>h
-" Fold tab, fold all tabs
-nmap <Leader>zt *V#jzf
-nmap <Leader>zT :g:<<C-R><C-W>:norm 0t<wl,zt<CR>
-" Open fold, open all folds
-nmap <Leader>zo jzo
-nmap <Leader>zO :g:<<C-R><C-W>:norm jzo
-" &lgt; and &gt; to < and >
-nmap <Leader>lt :%s:&lt;:<:g
-nmap <Leader>gt :%s:&gt;:>:g
-" Copy main register to system clipboard
-nmap <Leader>y :let @+=@"<CR>
-" Reuse last command
-nmap <Leader><Leader> :<C-R>:
-" Play commands on current line
-nmap <Leader>play "zyy@z
-" Edit end of previous line
-imap ,- <Esc>kA
-" Edit end of next line
-imap ,+ <Esc>jA
+nmap <F4> :bnext<CR>
+nmap <F5> :bprev<CR>
 " Use backupdir if exists
 set   backupdir=./_backup,.,/tmp
 set   directory=.,./_backup,/tmp
 " Reformat whole document
 nmap <Leader>= mzHmxgg=G`xzt`z
-" Switch current word with one in yank register 0
-nmap <Leader>sw diw"0P
-" Switch current line with one in register 0
-nmap <Leader>sl dd"0P
-" Delete next line
-nmap <Leader>dd jddk
-" Put space on edges of next block
-nmap <Leader><Space> %i <Esc>%a <Esc>
-" In case of accidental return in insert mode
-imap ,^ <Esc>ddkA
-" Place ; at end of preceding line
-imap ,; <Esc>mzkA;<Esc>`za
 " Place ; at end of current line
 nmap <Leader>; mzA;<Esc>`z
-" Make getter and setter
-nmap <Leader>gs mvw"zyww"xywGOpublic void set <Esc>"xpb~hXea(<C-R>z <C-R>x)<CR>{<CR>this.<C-R>x=<C-R>x;<CR>}<CR>public void get <C-R>x<Esc>b~hXea()<CR>{<CR>return <C-R>x;<CR>}<Esc>`v
 " Make current file executable
 nmap <Leader>+x :!chmod +x %
 " Replace whole file with contents of clipboard
 nmap <Leader>ar gg"zdG\V
-"Python specific
-imap ,__ ____<Left><Left>
-imap ,_i __init__
-imap ,_nm if __name__ == "__main__":<CR>
-" Run script
-nmap <F6> :w<CR>:!python %<CR>
-" Java specific
-nmap <f7> :w<CR>:!javac %<CR>:!java %<CR>
 " Arrows scroll
 nmap <Down> <C-e>
 nmap <Up> <C-y>
-" Asm do nothing
-nmap \$ obreak<esc>
-" Asm print Z
-nmap \Z omov byte [videomem], 'Z'<esc>
-" Run with makeos
-nmap \r :w<cr>:!~/os/makeos.sh<cr>
 
-"" vim2hs settings
-let g:haskell_conceal_wide = 1
+"""""""""""""""""""""""""""""""""
+"""Language Specific Settings""""
+"""""""""""""""""""""""""""""""""
+"" JAS
+au BufNewFile,BufRead *.jpp set filetype=c
 
-"haskell mode settings
-au BufEnter *.hs compiler ghc
-:let g:haddock_browser="/usr/bin/firefox"
+"" FORTH
+" forth syntax
+au BufNewFile,BufRead *.frt set filetype=forth
+au BufNewFile,BufRead *.fs set filetype=forth
+" Set syntax to forth
+nmap \f :set syntax=forth
 
-"" Bundle settings
-filetype off " required!
+"" Python
+" Run Python script
+nmap <F6> :w<CR>:!python %<CR>
+imap ,__ ____<Left><Left>
+imap ,_i __init__
+imap ,_nm if __name__ == "__main__":<CR>
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+"" Java
+" Run java program
+nmap <Leader>ja !javac <C-R>% && java %<
+" Java specific
+nmap <f7> :w<CR>:!javac %<CR>:!java %<CR>
 
-" let Vundle manage Vundle
-" " required! 
-Bundle 'gmarik/vundle'
-"
-" " My bundles here:
-Bundle 'dag/vim2hs'
-Bundle 'lukerandall/haskellmode-vim'
+""" Haskell
 
-filetype plugin indent on " required!
+
+""""""""""""""""""""""""
+"""Plugin Settings""""""
+""""""""""""""""""""""""
+syntax on
+filetype plugin indent on
+
+" if has('win32') || has('win64')
+"     set runtimepath=path/to/home.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,path/to/home.vim/after
+" endif
+
+" Set up plugins- ctrl-p, ghc-mod, neco-ghc, neocomplete, nerdcommenter,
+" nerdtree, supertab, syntastic, tabular, tagbar, tlib_vim,
+" vim-addon-mw-utils,
+" vim-easymotion, vim-proc, vim-sneak, vim-snipmate
+execute pathogen#infect()
+
+""" Syntastic
+map <Leader>y :SyntasticToggleMode<CR>
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+""" GHC Mod Settings
+map <silent> tw :GhcModTypeInsert<CR>
+map <silent> ts :GhcModSplitFunCase<CR>
+map <silent> tq :GhcModType<CR>
+map <silent> te :GhcModTypeClear<CR>
+
+""" Super Tab Settings
+let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+
+if has("gui_running")
+  imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+else " no gui
+  if has("unix")
+    inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+  endif
+endif
+
+let g:haskellmode_completion_ghc = 1
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+""" NERDTree Settings
+map <Leader>n :NERDTreeToggle<CR>
+
+""" Tabularize Settings
+let g:haskell_tabular = 1
+
+vmap a= :Tabularize /=<CR>
+vmap a; :Tabularize /::<CR>
+vmap a- :Tabularize /-><CR>
+
+""" Ctrl-p Settings
+map <silent> <Leader>t :CtrlP()<CR>
+noremap <leader>b<space> :CtrlPBuffer<cr>
+let g:ctrlp_custom_ignore = '\v[\/]dist$'
+
+""" EasyMotion Settings
+nmap <Leader><Leader>l <Plug>(easymotion-overwin-w)
+
+""" Tagbar Settings
+nmap <Leader>g :TagbarToggle<CR>
+
+let g:tagbar_type_haskell = {
+    \ 'ctagsbin'  : 'hasktags',
+    \ 'ctagsargs' : '-x -c -o-',
+    \ 'kinds'     : [
+        \  'm:modules:0:1',
+        \  'd:data: 0:1',
+        \  'd_gadt: data gadt:0:1',
+        \  't:type names:0:1',
+        \  'nt:new types:0:1',
+        \  'c:classes:0:1',
+        \  'cons:constructors:1:1',
+        \  'c_gadt:constructor gadt:1:1',
+        \  'c_a:constructor accessors:1:1',
+        \  'ft:function types:1:1',
+        \  'fi:function implementations:0:1',
+        \  'o:others:0:1'
+    \ ],
+    \ 'sro'        : '.',
+    \ 'kind2scope' : {
+        \ 'm' : 'module',
+        \ 'c' : 'class',
+        \ 'd' : 'data',
+        \ 't' : 'type'
+    \ },
+    \ 'scope2kind' : {
+        \ 'module' : 'm',
+        \ 'class'  : 'c',
+        \ 'data'   : 'd',
+        \ 'type'   : 't'
+    \ }
+\ }
+""""""""""""""""""""""""
+"""Hex Mode Settings""""
+""""""""""""""""""""""""
+" HexMode stuff for easy hex editing
+nnoremap <C-H> :Hexmode<CR>
+inoremap <C-H> <Esc>:Hexmode<CR>
+vnoremap <C-H> :<C-U>Hexmode<CR>
+
+" ex command for toggling hex mode - define mapping if desired
+command -bar Hexmode call ToggleHex()
+
+" helper function to toggle hex mode
+function ToggleHex()
+  " hex mode should be considered a read-only operation
+  " save values for modified and read-only for restoration later,
+  " and clear the read-only flag for now
+  let l:modified=&mod
+  let l:oldreadonly=&readonly
+  let &readonly=0
+  let l:oldmodifiable=&modifiable
+  let &modifiable=1
+  if !exists("b:editHex") || !b:editHex
+    " save old options
+    let b:oldft=&ft
+    let b:oldbin=&bin
+    " set new options
+    setlocal binary " make sure it overrides any textwidth, etc.
+    let &ft="xxd"
+    " set status
+    let b:editHex=1
+    " switch to hex editor
+    %!xxd
+  else
+    " restore old options
+    let &ft=b:oldft
+    if !b:oldbin
+      setlocal nobinary
+    endif
+    " set status
+    let b:editHex=0
+    " return to normal editing
+    %!xxd -r
+  endif
+  " restore values for modified and read only state
+  let &mod=l:modified
+  let &readonly=l:oldreadonly
+  let &modifiable=l:oldmodifiable
+endfunction
 
 """"""""""""""""""""""""
 """End of my Settings"""
