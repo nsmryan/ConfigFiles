@@ -9,18 +9,17 @@ set nocompatible
 set ai
 set ic
 set ruler
+set number
 set ts=4
 set sw=4
 set bs=2
 set history=1000
 set clipboard=unnamedplus,autoselect
 set completeopt=menuone,menu,longest
-set nobackup 
 set backspace=indent,eol,start
 set matchpairs+=<:>
 set noeb
 set nowrap
-set number
 set showmode
 set smartindent
 set mouse=a
@@ -37,17 +36,34 @@ set gfn=Lucida_Console:h8:b:cANSI
 set wildmode=longest,list,full
 set wildmenu
 set completeopt+=longest
+set mat=2
+set magic
+
+" do not redraw when executing macros
+set lazyredraw
 
 " allow buffers to contain unsaved changes when not in use
 set hidden
 
+" disable backups
+set nobackup
+
+" Buffer cycling
+map <C-j> :bnext<CR>
+map <C-k> :bprev<CR>
+
 set t_Co=256
 set cmdheight=1
 
-" Set colors
-colorscheme desert
+" set the leader for mappings
+nnoremap ,, ,
+let mapleader=","
 
-"" GUI 
+" Set colors
+" colorscheme desert
+
+
+"" GUI
 " Remove toolbar
 set guioptions-=T
 " Add bottom scrollbar
@@ -60,16 +76,39 @@ if has("gui")
         cnoremap <M-Space> <C-C>:simalt ~<CR>
 endif
 
-"" Search 
+"" Search
 set smartcase
 set incsearch
 
 " set runtimepath=~/_vim,$VIMRUNTIME
 
+" Set up the statusline
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\
+set statusline=%t\ %m\ %r\ %y\ %f\ %=\ %l\/%L\ (\%%%-p)
+set laststatus=2
+
+function! FormatTestCases()
+  norm gg0f Djj0f D
+  4,$s:False:0:g
+  4,$s:True:1:g
+  4,$s/:: bool.*$//g
+  4,$s/.:= //g
+  4,$s/(# //g
+  4,$s/#) :: Vect2.*%/,/g
+  4,$s/^0\s*$/,0/g
+  4,$s/^1\s*$/,1/g
+  4,$norm 3J
+  4,$s/ //g
+endfunction
+
 """"""""""""""""""""""""""""""""
 ""General Keymap Settings"""""""
 """"""""""""""""""""""""""""""""
-nmap <Leader>h :noh<CR> 
+" remove search results
+nmap <Leader>h :noh<CR>
+
+" Set current directory to current file's directory
+nmap <Leader>d :cd %:p:h<CR>
 
 " No beeping or screenflash
 set vb t_vb=
@@ -86,22 +125,22 @@ imap <C-H> <Left>
 imap <C-J> <Down>
 imap <C-K> <Up>
 imap <C-L> <Right>
-" Make line without entering insert mode 
+" Make line without entering insert mode
 nmap <Leader>o o<Esc>
 nmap <Leader>O O<Esc>
-" Tab over and back in normal mode 
+" Tab over and back in normal mode
 nmap <S-Tab> <gV
 nmap <Tab> >gV
 " quicker tab ball
 nmap <Leader>b :tab ball<CR>
-" Unmapping for windows 
-" unmap <C-A> 
-" unmap <C-V> 
-" unmap <C-X> 
+" Unmapping for windows
+" unmap <C-A>
+" unmap <C-V>
+" unmap <C-X>
 " Source vimrc
 nmap <Leader>s :source $MYVIMRC<CR><CR>
 " Edit vimrc
-nmap <Leader>rc :tabnew<CR>:e $MYVIMRC<CR>
+nmap <Leader>rc :e $MYVIMRC<CR>
 " Mappings for tabs
 nmap <Leader>tn :tabnew<CR>
 nmap <Leader>> :tablast<CR>
@@ -111,8 +150,8 @@ nmap <F9> :tabn<CR>
 nmap <F4> :bnext<CR>
 nmap <F5> :bprev<CR>
 " Use backupdir if exists
-set   backupdir=./_backup,.,/tmp
-set   directory=.,./_backup,/tmp
+set backupdir=./_backup,.,/tmp
+set directory=.,./_backup,/tmp
 " Reformat whole document
 nmap <Leader>= mzHmxgg=G`xzt`z
 " Place ; at end of current line
@@ -124,6 +163,14 @@ nmap <Leader>ar gg"zdG\V
 " Arrows scroll
 nmap <Down> <C-e>
 nmap <Up> <C-y>
+" toggle relative line numbers
+nmap <Leader>er :set invrelativenumber<CR>
+" select last paste
+nmap <Leader>v V`]
+" jj to esc from insert mode
+inoremap jj <ESC>
+" split verical
+nmap <Leader>sv
 
 """""""""""""""""""""""""""""""""
 """Language Specific Settings""""
@@ -141,9 +188,6 @@ nmap \f :set syntax=forth
 "" Python
 " Run Python script
 nmap <F6> :w<CR>:!python %<CR>
-imap ,__ ____<Left><Left>
-imap ,_i __init__
-imap ,_nm if __name__ == "__main__":<CR>
 
 "" Java
 " Run java program
@@ -153,28 +197,88 @@ nmap <f7> :w<CR>:!javac %<CR>:!java %<CR>
 
 """ Haskell
 
+""" C/C++
+nmap <Leader>{ $F{gElct{<CR><ESC>
+
 
 """"""""""""""""""""""""
 """Plugin Settings""""""
 """"""""""""""""""""""""
 syntax on
+:autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 filetype plugin indent on
 
-" if has('win32') || has('win64')
-"     set runtimepath=path/to/home.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,path/to/home.vim/after
-" endif
+" Set up plugins-
+" ctrl-p
+" ghc-mod
+" neco-ghc
+" neocomplete
+" nerdcommenter
+" nerdtree
+" supertab
+" syntastic
+" tabular
+" tagbar
+" tlib_vim
+" vim-addon-mw-utils
+" vim-colors-solarized
+" vim-fugitive
+" vim-obsession
+" vim-easymotion
+" vim-proc
+" vim-sneak
+" vim-snipmate
+" vim-textobj-user
+" vim-procession
+" vim-better-whitespace
+" vim-rooter
 
-" Set up plugins- ctrl-p, ghc-mod, neco-ghc, neocomplete, nerdcommenter,
-" nerdtree, supertab, syntastic, tabular, tagbar, tlib_vim,
-" vim-addon-mw-utils,
-" vim-easymotion, vim-proc, vim-sneak, vim-snipmate
-execute pathogen#infect()
+" Pathogen setup
+"execute pathogen#infect()
+
+""" vim-plug setup
+call plug#begin('~/.vimfiles/plugged')
+
+Plug 'kien/ctrlp.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'tpope/vim-fugitive'
+Plug 'altercation/vim-colors-solarized'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'majutsushi/tagbar'
+Plug 'ervandew/supertab'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'Shougo/neocomplete.vim'
+Plug 'eagletmt/neco-ghc'
+Plug 'DanielG/ghc-mod'
+Plug 'garbas/vim-snipmate'
+Plug 'Shougo/vimproc.vim'
+Plug 'airblade/vim-rooter'
+Plug 'scrooloose/syntastic'
+Plug 'godlygeek/tabular'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'neovimhaskell/haskell-vim'
+
+Plug 'tpope/vim-obsession'
+Plug 'dhruvasagar/vim-prosession'
+Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
+
+call plug#end()
+
+" generate help documentation for loaded plugins
+" Helptags
 
 """ Syntastic
 map <Leader>y :SyntasticToggleMode<CR>
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+augroup syntastic_toggle
+  autocmd!
+  autocmd VimEnter * SyntasticToggleMode " disable syntastic by default
+augroup END
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
@@ -199,10 +303,21 @@ else " no gui
 endif
 
 let g:haskellmode_completion_ghc = 1
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+augroup haskell_necoghcomni
+  autocmd!
+  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+augroup END
 
 """ NERDTree Settings
 map <Leader>n :NERDTreeToggle<CR>
+
+""" Solarized Settings
+syntax enable
+set background=dark
+colorscheme solarized
+
+""" Prosession settings
+let g:prosession_dir='~/vimfiles/session'
 
 """ Tabularize Settings
 let g:haskell_tabular = 1
@@ -210,6 +325,7 @@ let g:haskell_tabular = 1
 vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /::<CR>
 vmap a- :Tabularize /-><CR>
+vmap ap :Tabularize 
 
 """ Ctrl-p Settings
 map <silent> <Leader>t :CtrlP()<CR>
@@ -219,7 +335,22 @@ let g:ctrlp_custom_ignore = '\v[\/]dist$'
 """ EasyMotion Settings
 nmap <Leader><Leader>l <Plug>(easymotion-overwin-w)
 
-""" Tagbar Settings
+""" Airline Settings
+" let g:airline#extensions#tabline#enabled = 1
+" set laststatus=2
+" AirlineTheme luna
+
+""" Rooter settings
+" Add haskell-specific patterns
+let g:rooter_patterns+=["stack.yaml","*.cabal"]
+" if the file is not in a project, use current dir
+let g:rooter_change_directory_for_non_project_files = 'current'
+
+""" Fugitive settings
+nmap <Leader>gs :Gstatus<CR>
+nmap <Leader>gd :Gdiff<CR>
+
+""" Tagbar settings
 nmap <Leader>g :TagbarToggle<CR>
 
 let g:tagbar_type_haskell = {
@@ -257,15 +388,15 @@ let g:tagbar_type_haskell = {
 """Hex Mode Settings""""
 """"""""""""""""""""""""
 " HexMode stuff for easy hex editing
-nnoremap <C-H> :Hexmode<CR>
-inoremap <C-H> <Esc>:Hexmode<CR>
-vnoremap <C-H> :<C-U>Hexmode<CR>
+nnoremap <C-H> :call ToggleHex()<CR>
+inoremap <C-H> <Esc>:call ToggleHex()<CR>
+vnoremap <C-H> :<C-U>call ToggleHex()<CR>
 
 " ex command for toggling hex mode - define mapping if desired
-command -bar Hexmode call ToggleHex()
+" command -bar Hexmode call ToggleHex()
 
 " helper function to toggle hex mode
-function ToggleHex()
+function! ToggleHex()
   " hex mode should be considered a read-only operation
   " save values for modified and read-only for restoration later,
   " and clear the read-only flag for now
