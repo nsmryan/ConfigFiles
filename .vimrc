@@ -38,7 +38,10 @@ set wildmenu
 set completeopt+=longest
 set mat=2
 set magic
-
+set invrelativenumber
+" show tabs
+set listchars=tab:>-
+"
 " do not redraw when executing macros
 set lazyredraw
 
@@ -75,6 +78,9 @@ if has("gui")
         inoremap <M-Space> <C-O>:simalt ~<CR>
         cnoremap <M-Space> <C-C>:simalt ~<CR>
 endif
+
+" Don't add end of line
+set noeol
 
 "" Search
 set smartcase
@@ -128,9 +134,7 @@ imap <C-L> <Right>
 " Make line without entering insert mode
 nmap <Leader>o o<Esc>
 nmap <Leader>O O<Esc>
-" Tab over and back in normal mode
-nmap <S-Tab> <gV
-nmap <Tab> >gV
+nmap <Tab> :b#<CR>
 " quicker tab ball
 nmap <Leader>b :tab ball<CR>
 " Unmapping for windows
@@ -169,8 +173,17 @@ nmap <Leader>er :set invrelativenumber<CR>
 nmap <Leader>v V`]
 " jj to esc from insert mode
 inoremap jj <ESC>
-" split verical
-nmap <Leader>sv
+" <Leader>m for quickly saving a file
+nmap <Leader>m :w<CR>
+" place parens around selection
+vmap ,( c()<ESC>P
+vmap ,) c()<ESC>P
+vmap ,[ c[]<ESC>P
+vmap ,] c[]<ESC>P
+vmap ," c""<ESC>P
+vmap ,' c''<ESC>P
+vmap ,< c<><ESC>P
+vmap ,> c<><ESC>P
 
 """""""""""""""""""""""""""""""""
 """Language Specific Settings""""
@@ -199,7 +212,7 @@ nmap <f7> :w<CR>:!javac %<CR>:!java %<CR>
 
 """ C/C++
 nmap <Leader>{ $F{gElct{<CR><ESC>
-
+nmap <Leader>et :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 
 """"""""""""""""""""""""
 """Plugin Settings""""""
@@ -207,34 +220,6 @@ nmap <Leader>{ $F{gElct{<CR><ESC>
 syntax on
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 filetype plugin indent on
-
-" Set up plugins-
-" ctrl-p
-" ghc-mod
-" neco-ghc
-" neocomplete
-" nerdcommenter
-" nerdtree
-" supertab
-" syntastic
-" tabular
-" tagbar
-" tlib_vim
-" vim-addon-mw-utils
-" vim-colors-solarized
-" vim-fugitive
-" vim-obsession
-" vim-easymotion
-" vim-proc
-" vim-sneak
-" vim-snipmate
-" vim-textobj-user
-" vim-procession
-" vim-better-whitespace
-" vim-rooter
-
-" Pathogen setup
-"execute pathogen#infect()
 
 """ vim-plug setup
 call plug#begin('~/.vimfiles/plugged')
@@ -250,15 +235,21 @@ Plug 'ervandew/supertab'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Shougo/neocomplete.vim'
-Plug 'eagletmt/neco-ghc'
-Plug 'DanielG/ghc-mod'
 Plug 'garbas/vim-snipmate'
 Plug 'Shougo/vimproc.vim'
 Plug 'airblade/vim-rooter'
 Plug 'scrooloose/syntastic'
 Plug 'godlygeek/tabular'
+
 Plug 'neovimhaskell/haskell-vim'
-Plug 'neovimhaskell/haskell-vim'
+Plug 'eagletmt/neco-ghc'
+Plug 'DanielG/ghc-mod'
+Plug 'eagletmt/ghcmod-vim'
+
+Plug 'mtth/scratch.vim'
+" Plug 'luochen1990/rainbow'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'mileszs/ack.vim'
 
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
@@ -327,6 +318,9 @@ vmap a; :Tabularize /::<CR>
 vmap a- :Tabularize /-><CR>
 vmap ap :Tabularize 
 
+""" Scratch settings
+nmap <Leader>es :Scratch<CR>
+
 """ Ctrl-p Settings
 map <silent> <Leader>t :CtrlP()<CR>
 noremap <leader>b<space> :CtrlPBuffer<cr>
@@ -342,7 +336,8 @@ nmap <Leader><Leader>l <Plug>(easymotion-overwin-w)
 
 """ Rooter settings
 " Add haskell-specific patterns
-let g:rooter_patterns+=["stack.yaml","*.cabal"]
+" this causes an error on startup
+" let g:rooter_patterns+=["stack.yaml","*.cabal"]
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
