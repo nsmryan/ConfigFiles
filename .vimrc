@@ -38,6 +38,7 @@ set wildmenu
 set completeopt+=longest
 set mat=2
 set magic
+set hlsearch
 set invrelativenumber
 " show tabs
 set listchars=tab:>-
@@ -169,6 +170,9 @@ nmap <Down> <C-e>
 nmap <Up> <C-y>
 " toggle relative line numbers
 nmap <Leader>er :set invrelativenumber<CR>
+" set colorscheme
+nmap <Leader>eo :colorscheme solarized<CR>
+nmap <Leader>ec :colorscheme corporation<CR>
 " select last paste
 nmap <Leader>v V`]
 " jj to esc from insert mode
@@ -254,7 +258,8 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-obsession'
 Plug 'dhruvasagar/vim-prosession'
 Plug 'easymotion/vim-easymotion'
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
+Plug 'alessandroyorba/alduin'
 
 call plug#end()
 
