@@ -7,8 +7,7 @@
 """"""""""""""""""""""""
 set nocompatible
 set ai
-set ic
-set ruler
+" set ruler
 set number
 set ts=4
 set sw=4
@@ -18,12 +17,14 @@ set clipboard=unnamedplus,autoselect
 set completeopt=menuone,menu,longest
 set backspace=indent,eol,start
 set matchpairs+=<:>
+" disable error bell 
 set noeb
+" disable line wrapping
 set nowrap
-set showmode
-set smartindent
+" set showmode
+" set smartindent
 set mouse=a
-set smarttab
+" set smarttab
 "set autoindent
 set shortmess=a
 set clipboard=unnamed
@@ -38,10 +39,14 @@ set wildmenu
 set completeopt+=longest
 set mat=2
 set magic
+" highlight search text
 set hlsearch
+" default to relative line numbers
 set invrelativenumber
 " show tabs
 set listchars=tab:>-
+" show number of selected lines
+set showcmd
 "
 " do not redraw when executing macros
 set lazyredraw
@@ -53,8 +58,8 @@ set hidden
 set nobackup
 
 " Buffer cycling
-map <C-j> :bnext<CR>
-map <C-k> :bprev<CR>
+map <C-n> :bnext<CR>
+map <C-p> :bprev<CR>
 
 set t_Co=256
 set cmdheight=1
@@ -91,7 +96,7 @@ set incsearch
 
 " Set up the statusline
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\
-set statusline=%t\ %m\ %r\ %y\ %f\ %=\ %l\/%L\ (\%%%-p)
+set statusline=%n\ %t\ %m\ %r\ %y\ %F\ %=\ %l\/%L\ (\%%%-p)
 set laststatus=2
 
 function! FormatTestCases()
@@ -115,7 +120,7 @@ endfunction
 nmap <Leader>h :noh<CR>
 
 " Set current directory to current file's directory
-nmap <Leader>d :cd %:p:h<CR>
+nmap <Leader>ed :cd %:p:h<CR>
 
 " No beeping or screenflash
 set vb t_vb=
@@ -188,7 +193,13 @@ vmap ," c""<ESC>P
 vmap ,' c''<ESC>P
 vmap ,< c<><ESC>P
 vmap ,> c<><ESC>P
-
+" Splits
+nmap <leader>sh :leftabove  vnew<CR>
+nmap <leader>sl :rightbelow vnew<CR>
+nmap <leader>sk :leftabove  new<CR>
+nmap <leader>sj :rightbelow new<CR>
+set splitbelow
+set splitright
 """""""""""""""""""""""""""""""""
 """Language Specific Settings""""
 """""""""""""""""""""""""""""""""
@@ -240,19 +251,17 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'Shougo/neocomplete.vim'
 Plug 'garbas/vim-snipmate'
-Plug 'Shougo/vimproc.vim'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'airblade/vim-rooter'
 Plug 'scrooloose/syntastic'
 Plug 'godlygeek/tabular'
 
 Plug 'neovimhaskell/haskell-vim'
-Plug 'eagletmt/neco-ghc'
+" Plug 'eagletmt/neco-ghc'
 Plug 'DanielG/ghc-mod'
 Plug 'eagletmt/ghcmod-vim'
 
 Plug 'mtth/scratch.vim'
-" Plug 'luochen1990/rainbow'
-Plug 'kien/rainbow_parentheses.vim'
 Plug 'mileszs/ack.vim'
 
 Plug 'tpope/vim-obsession'
@@ -261,7 +270,42 @@ Plug 'easymotion/vim-easymotion'
 " Plug 'justinmk/vim-sneak'
 Plug 'alessandroyorba/alduin'
 
+Plug 'jacoborus/tender.vim'
+Plug 'jdkanani/vim-material-theme'
+Plug 'akmassey/vim-codeschool'
+Plug 'vim-scripts/twilight256.vim'
+Plug 'dracula/vim'
+Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
+Plug 'mhartington/oceanic-next'
+Plug 'iCyMind/NeoSolarized'
+Plug 'MaxSt/FlatColor'
+
+" Plug 'junegunn/goyo.vim'
+Plug 'mikewest/vimroom'
+
+Plug 'mhinz/vim-startify'
+
+Plug 'duythinht/vim-coffee'
+Plug 'duythinht/inori'
+
+" Plug 'junegunn/vim-peekaboo'
+"
+
 call plug#end()
+
+" pane switching
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+nmap <C-h> <C-w>h
+
+" Cursor settings for Mintty in Cygwin
+" let &t_ti.="\e[1 q"
+" let &t_SI.="\e[5 q"
+" let &t_EI.="\e[1 q"
+" let &t_te.="\e[0 q"
+
 
 " generate help documentation for loaded plugins
 " Helptags
@@ -310,7 +354,7 @@ map <Leader>n :NERDTreeToggle<CR>
 """ Solarized Settings
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme gruvbox
 
 """ Prosession settings
 let g:prosession_dir='~/vimfiles/session'
