@@ -57,20 +57,12 @@ set hidden
 " disable backups
 set nobackup
 
-" Buffer cycling
-map <C-n> :bnext<CR>
-map <C-p> :bprev<CR>
-
 set t_Co=256
 set cmdheight=1
 
 " set the leader for mappings
 nnoremap ,, ,
 let mapleader=","
-
-" Set colors
-" colorscheme desert
-
 
 "" GUI
 " Remove toolbar
@@ -92,92 +84,48 @@ set noeol
 set smartcase
 set incsearch
 
-" set runtimepath=~/_vim,$VIMRUNTIME
-
 " Set up the statusline
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\
 set statusline=%n\ %t\ %m\ %r\ %y\ %F\ %=\ %l\/%L\ (\%%%-p)
 set laststatus=2
-
-function! FormatTestCases()
-  norm gg0f Djj0f D
-  4,$s:False:0:g
-  4,$s:True:1:g
-  4,$s/:: bool.*$//g
-  4,$s/.:= //g
-  4,$s/(# //g
-  4,$s/#) :: Vect2.*%/,/g
-  4,$s/^0\s*$/,0/g
-  4,$s/^1\s*$/,1/g
-  4,$norm 3J
-  4,$s/ //g
-endfunction
 
 """"""""""""""""""""""""""""""""
 ""General Keymap Settings"""""""
 """"""""""""""""""""""""""""""""
+" Source vimrc
+nmap <Leader>s :source $MYVIMRC<CR><CR>
+" Edit vimrc
+nmap <Leader>rc :e $MYVIMRC<CR>
 " remove search results
 nmap <Leader>h :noh<CR>
-
-" Set current directory to current file's directory
-nmap <Leader>ed :cd %:p:h<CR>
-
 " No beeping or screenflash
 set vb t_vb=
 " Make sure <Esc>==<C-[>
 imap <C-[> <Esc>
 nmap <C-[> <C-L>
-" Select all and yank all into clipboard
-nmap <Leader>a ggVG
-nmap <Leader>ay ggVG"+y<CR>
-" Save on f1
-nmap <F1> :w<cr>
 " Insert mode movement
 imap <C-H> <Left>
 imap <C-J> <Down>
 imap <C-K> <Up>
 imap <C-L> <Right>
-" Make line without entering insert mode
-nmap <Leader>o o<Esc>
-nmap <Leader>O O<Esc>
 nmap <Tab> :b#<CR>
-" quicker tab ball
-nmap <Leader>b :tab ball<CR>
 " Unmapping for windows
 " unmap <C-A>
 " unmap <C-V>
 " unmap <C-X>
-" Source vimrc
-nmap <Leader>s :source $MYVIMRC<CR><CR>
-" Edit vimrc
-nmap <Leader>rc :e $MYVIMRC<CR>
-" Mappings for tabs
-nmap <Leader>tn :tabnew<CR>
-nmap <Leader>> :tablast<CR>
-nmap <Leader>< :tabfirst<CR>
-nmap <F8> :tabp<CR>
-nmap <F9> :tabn<CR>
-nmap <F4> :bnext<CR>
-nmap <F5> :bprev<CR>
-" Use backupdir if exists
-set backupdir=./_backup,.,/tmp
-set directory=.,./_backup,/tmp
+" Use vimbackup as the backup and swap directory if one exists
+set backupdir=./_vimbackup,./.vimbackup,.
+set directory=./_vimbackup,./.vimbackup,.
 " Reformat whole document
 nmap <Leader>= mzHmxgg=G`xzt`z
-" Place ; at end of current line
-nmap <Leader>; mzA;<Esc>`z
 " Make current file executable
 nmap <Leader>+x :!chmod +x %
-" Replace whole file with contents of clipboard
-nmap <Leader>ar gg"zdG\V
 " Arrows scroll
 nmap <Down> <C-e>
 nmap <Up> <C-y>
 " toggle relative line numbers
 nmap <Leader>er :set invrelativenumber<CR>
-" set colorscheme
 nmap <Leader>eo :colorscheme solarized<CR>
-nmap <Leader>ec :colorscheme corporation<CR>
+nmap <Leader>eg :colorscheme corporation<CR>
 " select last paste
 nmap <Leader>v V`]
 " jj to esc from insert mode
@@ -210,23 +158,13 @@ au BufNewFile,BufRead *.jpp set filetype=c
 " forth syntax
 au BufNewFile,BufRead *.frt set filetype=forth
 au BufNewFile,BufRead *.fs set filetype=forth
-" Set syntax to forth
-nmap \f :set syntax=forth
 
 "" Python
 " Run Python script
 nmap <F6> :w<CR>:!python %<CR>
 
-"" Java
-" Run java program
-nmap <Leader>ja !javac <C-R>% && java %<
-" Java specific
-nmap <f7> :w<CR>:!javac %<CR>:!java %<CR>
-
-""" Haskell
-
 """ C/C++
-nmap <Leader>{ $F{gElct{<CR><ESC>
+" Open cpp and h file together
 nmap <Leader>et :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 
 """"""""""""""""""""""""
@@ -235,41 +173,49 @@ nmap <Leader>et :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 syntax on
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 filetype plugin indent on
+syntax on
 
 """ vim-plug setup
 call plug#begin('~/.vimfiles/plugged')
 
-Plug 'kien/ctrlp.vim'
+"" Utility Plugins
 Plug 'kana/vim-textobj-user'
-Plug 'tpope/vim-fugitive'
-Plug 'altercation/vim-colors-solarized'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'majutsushi/tagbar'
-Plug 'ervandew/supertab'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'Shougo/neocomplete.vim'
-Plug 'garbas/vim-snipmate'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'airblade/vim-rooter'
+
 Plug 'scrooloose/syntastic'
-Plug 'godlygeek/tabular'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdtree'
 
-Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc'
-Plug 'DanielG/ghc-mod'
-Plug 'eagletmt/ghcmod-vim'
-
-Plug 'mtth/scratch.vim'
-Plug 'mileszs/ack.vim'
-
-Plug 'tpope/vim-obsession'
-Plug 'dhruvasagar/vim-prosession'
+"" Editing Plugins
 Plug 'easymotion/vim-easymotion'
+"Plug 'ervandew/supertab'
+"Plug 'Shougo/neocomplete.vim'
+"Plug 'garbas/vim-snipmate'
+Plug 'airblade/vim-rooter'
+" Align text
+Plug 'godlygeek/tabular'
+" Search
+Plug 'mileszs/ack.vim'
 " Plug 'justinmk/vim-sneak'
-Plug 'alessandroyorba/alduin'
 
+"" Extra displays/Information
+Plug 'tpope/vim-fugitive'
+" Create scratch pad
+Plug 'mtth/scratch.vim'
+" Nice startup screen
+Plug 'mhinz/vim-startify'
+Plug 'severin-lemaignan/vim-minimap'
+" See register contents in pane
+" Plug 'junegunn/vim-peekaboo'
+" Fast file search
+Plug 'kien/ctrlp.vim'
+Plug 'mikewest/vimroom'
+
+"" Color Schemes
+Plug 'altercation/vim-colors-solarized'
+Plug 'alessandroyorba/alduin'
 Plug 'jacoborus/tender.vim'
 Plug 'jdkanani/vim-material-theme'
 Plug 'akmassey/vim-codeschool'
@@ -280,19 +226,39 @@ Plug 'chriskempson/base16-vim'
 Plug 'mhartington/oceanic-next'
 Plug 'iCyMind/NeoSolarized'
 Plug 'MaxSt/FlatColor'
+Plug 'duythinht/inori'
+Plug 'jnurmine/Zenburn'
+
+"" Haskell
+Plug 'neovimhaskell/haskell-vim'
+" Plug 'eagletmt/neco-ghc'
+"Plug 'scrooloose/nerdcommenter'
+Plug 'DanielG/ghc-mod'
+Plug 'eagletmt/ghcmod-vim'
+
+" Session Management
+Plug 'vim-scripts/Session-manager'
+" Plug 'tpope/vim-obsession'
+" Plug 'dhruvasagar/vim-prosession'
 
 " Plug 'junegunn/goyo.vim'
-Plug 'mikewest/vimroom'
 
-Plug 'mhinz/vim-startify'
-
-Plug 'duythinht/vim-coffee'
-Plug 'duythinht/inori'
-
-" Plug 'junegunn/vim-peekaboo'
 "
+Plug 'jeetsukumaran/vim-buffergator'
+
+Plug 'benmills/vimux'
+
+Plug 'arcticicestudio/nord-vim'
+Plug 'fcpg/vim-fahrenheit'
+
+
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
+
+""" Vim Diff
+nmap <Leader>l :diffget LOCAL<CR>
+nmap <Leader>o :diffget REMOTE<CR>
 
 " pane switching
 nmap <C-j> <C-w>j
@@ -309,6 +275,18 @@ nmap <C-h> <C-w>h
 
 " generate help documentation for loaded plugins
 " Helptags
+
+" Colorscheme
+colorscheme gruvbox
+
+" Startify
+let g:startify_session_dir = '~/.vim_sessions'
+
+"""" Vimux
+nnoremap <leader>l :call VimuxRunCommandInDir("love .", 0)<CR>
+nnoremap <leader>r :call VimuxRunCommandInDir("luajit main.lua", 0)<CR>
+nnoremap <leader>k :call VimuxRunCommandInDir("stack build", 0)<CR>
+nnoremap <leader>j :call VimuxRunCommandInDir("stack exec CADH", 0)<CR>
 
 """ Syntastic
 map <Leader>y :SyntasticToggleMode<CR>
@@ -354,7 +332,6 @@ map <Leader>n :NERDTreeToggle<CR>
 """ Solarized Settings
 syntax enable
 set background=dark
-colorscheme gruvbox
 
 """ Prosession settings
 let g:prosession_dir='~/vimfiles/session'
@@ -363,8 +340,6 @@ let g:prosession_dir='~/vimfiles/session'
 let g:haskell_tabular = 1
 
 vmap a= :Tabularize /=<CR>
-vmap a; :Tabularize /::<CR>
-vmap a- :Tabularize /-><CR>
 vmap ap :Tabularize 
 
 """ Scratch settings
@@ -376,23 +351,18 @@ noremap <leader>b<space> :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
 
 """ EasyMotion Settings
-nmap <Leader><Leader>l <Plug>(easymotion-overwin-w)
-
-""" Airline Settings
-" let g:airline#extensions#tabline#enabled = 1
-" set laststatus=2
-" AirlineTheme luna
+nmap <Leader>p <Plug>(easymotion-overwin-w)
 
 """ Rooter settings
-" Add haskell-specific patterns
-" this causes an error on startup
-" let g:rooter_patterns+=["stack.yaml","*.cabal"]
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
 """ Fugitive settings
 nmap <Leader>gs :Gstatus<CR>
 nmap <Leader>gd :Gdiff<CR>
+
+""" Session Manager
+nmap <Leader>sm :call SessionManagerToggle()<CR>
 
 """ Tagbar settings
 nmap <Leader>g :TagbarToggle<CR>
@@ -477,6 +447,31 @@ function! ToggleHex()
   let &modifiable=l:oldmodifiable
 endfunction
 
+
+""""""""""""""""""""""""
+""" Fix Issues with Syntax Highlighting an sessions"""
+""""""""""""""""""""""""
+fu! SaveSess()
+  execute 'mksession! ' . getcwd() . '/.session.vim'
+endfunction
+
+fu! RestoreSess()
+  if filereadable(getcwd() . '/.session.vim')
+    execute 'so ' . getcwd() . '/.session.vim'
+    if bufexists(1)
+      for l in range(1, bufnr('$'))
+        if bufwinnr(l) == -1
+          exec 'sbuffer ' . l
+        endif
+      endfor
+    endif
+  endif
+endfunction
+
+autocmd VimLeave * call SaveSess()
+autocmd VimEnter * nested call RestoreSess()
+
+set sessionoptions-=options  " Don't save options
 """"""""""""""""""""""""
 """End of my Settings"""
 """"""""""""""""""""""""
