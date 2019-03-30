@@ -8,16 +8,20 @@ let mapleader=","
 
 " default to relative line numbers
 set invrelativenumber
+set number
 
 " Tab/space settings
-set ts=4
-set sw=4
+set ts=2
+set sw=2
 set bs=2
 
 set expandtab
 
 "" auto indent
 set ai
+
+" don't prompt about swap files
+set shortmess+=A
 
 " longer undo history
 set history=1000
@@ -43,7 +47,6 @@ set nowrap
 set mouse=a
 
 " set smarttab
-"set autoindent
 set shortmess=a
 set clipboard=unnamed
 set go+=a
@@ -127,43 +130,37 @@ set statusline=%n\ %t\ %m\ %r\ %y\ %F\ %=\ %l\/%L\ (\%%%-p)
 """""""""Key Bindings"""""""""""
 """"""""""""""""""""""""""""""""
 " Source vimrc
-nmap <Leader>s :source $MYVIMRC<CR><CR>
+nmap <leader>s :source $MYVIMRC<CR><CR>
 " Edit vimrc
-nmap <Leader>rc :e $MYVIMRC<CR>
+nmap <leader>rc :e $MYVIMRC<CR>
 " remove search results
-nmap <Leader>h :noh<CR>
+nmap <leader>h :noh<CR>
 
 " Make sure <Esc>==<C-[>
 imap <C-[> <Esc>
 nmap <C-[> <C-L>
 
-" Insert mode movement
-imap <C-H> <Left>
-imap <C-J> <Down>
-imap <C-K> <Up>
-imap <C-L> <Right>
-
 " tab toggles to last buffer
-nmap <Tab> :b#<CR>
+" nmap <Tab> :b#<CR>
 
 " exit insert mode with jk
 inoremap jk <esc>
 
 " Reformat whole document
-nmap <Leader>= mzHmxgg=G`xzt`z
+nmap <leader>= mzHmxgg=G`xzt`z
 
 " Arrows scroll
 nmap <Down> <C-e>
 nmap <Up> <C-y>
 
 " toggle relative line numbers
-nmap <Leader>er :set invrelativenumber<CR>
+nmap <leader>er :set invrelativenumber<CR>
 
 " select last paste
-nmap <Leader>v V`]
+nmap <leader>v V`]
 
-" <Leader>m for quickly saving a file
-nmap <Leader>m :w<CR>
+" <leader>m for quickly saving a file
+nmap <leader>m :w<CR>
 
 " place delimiters around selection
 vmap ,( c()<ESC>P
@@ -184,10 +181,6 @@ nmap <leader>sj :rightbelow new<CR>
 set splitbelow
 set splitright
 
-" Reselect visual block after indenting
-vnoremap < <gv
-vnoremap > >gv
-
 " Make Y more like other capitals
 noremap Y y$
 
@@ -202,6 +195,11 @@ au BufNewFile,BufRead *.jpp set filetype=c
 au BufNewFile,BufRead *.frt set filetype=forth
 au BufNewFile,BufRead *.fs set filetype=forth
 au BufNewFile,BufRead *.forth set filetype=forth
+
+"" C
+" Add function to Unity unit tests
+nmap <Leader>unit 0f(bywG?RUN_TEST<CR>oRUN_TEST(<ESC>pA);<ESC>,h
+
 
 """"""""""""""""""""""""
 """Plugin Settings""""""
@@ -223,18 +221,16 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 " NOTE reavaluate this plugin
 " Plug 'majutsushi/tagbar'
 
-Plug 'scrooloose/nerdtree'
-
 Plug 'benmills/vimux'
 
 "" Editing Plugins
-" NOTE reavaluate this plugin
-" Plug 'easymotion/vim-easymotion'
-
-" NOTE reassess this plugin
-" Plug 'jeetsukumaran/vim-buffergator'
+Plug 'vim-scripts/a.vim'
 
 Plug 'airblade/vim-rooter'
+
+Plug 'scrooloose/nerdtree'
+
+Plug 'tc50cal/vim-terminal'
 
 " Align text
 Plug 'godlygeek/tabular'
@@ -242,8 +238,9 @@ Plug 'godlygeek/tabular'
 " Search
 Plug 'mileszs/ack.vim'
 
+Plug 'rust-lang/rust.vim'
+
 "" Extra displays/Information
-" NOTE reavaluate this plugin
 Plug 'tpope/vim-fugitive'
 
 " Nice startup screen
@@ -252,20 +249,18 @@ Plug 'mhinz/vim-startify'
 " Fast file search
 Plug 'kien/ctrlp.vim'
 
-Plug 'mikewest/vimroom'
-
 "" Color Schemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'chriskempson/base16-vim'
 Plug 'tomasr/molokai'
-
+Plug 'hhff/SpacegrayEighties.vim'
 
 call plug#end()
 
 """ Vim Diff
-nmap <Leader>l :diffget LOCAL<CR>
-nmap <Leader>o :diffget REMOTE<CR>
+nmap <leader>l :diffget LOCAL<CR>
+nmap <leader>o :diffget REMOTE<CR>
 
 " pane switching
 nmap <C-j> <C-w>j
@@ -279,39 +274,42 @@ colorscheme gruvbox
 " Startify
 let g:startify_session_dir = '~/.vim_sessions'
 
+" ACk
+" use ripgrep if available as the search tool
+if executable("rg")
+    let g:ackprg = 'rg --vimgrep --no-heading'
+endif
+
 """" Vimux
 " rerun the last command
 nnoremap <leader>r :call VimuxRunCommandInDir("!!", 0)<CR>
 
 """ NERDTree Settings
-map <Leader>n :NERDTreeToggle<CR>
+map <leader>n :NERDTreeToggle<CR>
 
 """ Ctrl-p Settings
-map <silent> <Leader>t :CtrlP()<CR>
+map <silent> <leader>t :CtrlP()<CR>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
 
 """ EasyMotion Settings
-nmap <Leader>p <Plug>(easymotion-overwin-w)
+nmap <leader>p <Plug>(easymotion-overwin-w)
 
 """ Rooter settings
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
 """ Fugitive settings
-nmap <Leader>gs :Gstatus<CR>
-nmap <Leader>gd :Gdiff<CR>
-
+nmap <leader>gs :Gstatus<CR>
+nmap <leader>gd :Gdiff<CR>
 
 """"""""""""""""""""""""
 """Hex Mode Settings""""
 """"""""""""""""""""""""
 " Enter and exit HexMode
-nnoremap <C-H> :call ToggleHex()<CR>
-inoremap <C-H> <Esc>:call ToggleHex()<CR>
-vnoremap <C-H> :<C-U>call ToggleHex()<CR>
+nnoremap <leader>x :call ToggleHex()<CR>
 
 " ex command for toggling hex mode
-command -bar Hexmode call ToggleHex()
+" command -bar Hexmode call ToggleHex()
 
 " helper function to toggle hex mode
 function! ToggleHex()
@@ -351,28 +349,3 @@ function! ToggleHex()
   let &modifiable=l:oldmodifiable
 endfunction
   
-""""""""""""""""""""""""
-""" Fix Issues with Syntax Highlighting an sessions"""
-""""""""""""""""""""""""
-fu! SaveSess()
-  execute 'mksession! ' . getcwd() . '/.session.vim'
-endfunction
-
-fu! RestoreSess()
-  if filereadable(getcwd() . '/.session.vim')
-    execute 'so ' . getcwd() . '/.session.vim'
-    if bufexists(1)
-      for l in range(1, bufnr('$'))
-        if bufwinnr(l) == -1
-          exec 'sbuffer ' . l
-        endif
-      endfor
-    endif
-  endif
-endfunction
-
-autocmd VimLeave * call SaveSess()
-autocmd VimEnter * nested call RestoreSess()
-
-set sessionoptions-=options  " Don't save options
-
