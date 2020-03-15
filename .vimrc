@@ -1,6 +1,4 @@
-
-" Disable vi compatibility
-set nocompatible
+""" Editor Settings
 
 " set the leader for mappings
 nnoremap ,, ,
@@ -8,81 +6,68 @@ let mapleader=","
 
 " default to relative line numbers
 set invrelativenumber
-set number
-
-" Tab/space settings
-set ts=2
-set sw=2
-set bs=2
-
-set expandtab
-
-"" auto indent
+" no vi compatibility
+set nocompatible
+" auto indent
 set ai
-
-" don't prompt about swap files
-set shortmess+=A
-
+" set ruler
+set number
+" tab/space settings
+set ts=4
+set sw=4
+set bs=2
 " longer undo history
 set history=1000
-
 set clipboard=unnamedplus,autoselect
-
-" smart backspace
+set completeopt=menuone,menu,longest
 set backspace=indent,eol,start
-
-" add corner braces to matching pairs
 set matchpairs+=<:>
-
 " disable error bell 
 set noeb
-
-" No beeping or screenflash
-set vb t_vb=
-
 " disable line wrapping
 set nowrap
-
 " enable mouse use
 set mouse=a
-
-" set smarttab
+" don't prompt about swap files
 set shortmess=a
 set clipboard=unnamed
 set go+=a
-
+set expandtab
+set tabstop=2
+set shiftwidth=2
 " Set font
 set gfn=Lucida_Console:h8:b:cANSI
-
-" completion for wildcard character
 set wildmode=longest,list,full
-
-" enhanced command line completion
 set wildmenu
-
-" completion more like an IDE
-set completeopt=menuone,menu,longest,preview
-
-" use magic regex
+set completeopt+=longest
+set mat=2
 set magic
-
-" disable backup files
-set nobackup
-
+" highlight search text
+set hlsearch
+" show tabs
+set listchars=tab:>-
+" show number of selected lines
+set showcmd
 " do not redraw when executing macros
 set lazyredraw
-
 " allow buffers to contain unsaved changes when not in use
 set hidden
-
 " disable backups
 set nobackup
-
 " more terminal colors
 set t_Co=256
-
-" minimal command height
+" height of vim cmd
 set cmdheight=1
+" Don't add end of line to avoid modifying files unintentially
+set noeol
+" Search
+set smartcase
+set incsearch
+" No beeping or screenflash
+set vb t_vb=
+" default split below and right
+set splitbelow
+set splitright
 
 "" GUI
 " Remove toolbar
@@ -97,19 +82,7 @@ if has("gui")
         cnoremap <M-Space> <C-C>:simalt ~<CR>
 endif
 
-" Don't add end of line- this can modify files unintentionally
-set noeol
-
-" Use a centralized directory for swap files, if one exists.
-" otherwise use the current directory.
-set directory=~/.vimfiles/swp,~/.vim/swp,.
-
-"" Search
-set smartcase
-set incsearch
-set hlsearch
-
-" Set up the statusline. This is a veru simple and mostly static statusline
+" Set up the statusline. This is a very simple and mostly static statusline
 " designed for minimal distraction.
 set laststatus=2
 set statusline=%n\ %t\ %m\ %r\ %y\ %F\ %=\ %l\/%L\ (\%%%-p)
@@ -123,87 +96,65 @@ set statusline=%n\ %t\ %m\ %r\ %y\ %F\ %=\ %l\/%L\ (\%%%-p)
 "              |   |   |   + file type
 "              |   |   + read only flag
 "              |   + file name
-"              + buffer number   
-
-
-""""""""""""""""""""""""""""""""
-"""""""""Key Bindings"""""""""""
-""""""""""""""""""""""""""""""""
+"              + buffer number
+"
+"" General Keymap Settings
 " Source vimrc
-nmap <leader>s :source $MYVIMRC<CR><CR>
+nmap <Leader>s :source $MYVIMRC<CR><CR>
 " Edit vimrc
-nmap <leader>rc :e $MYVIMRC<CR>
+nmap <Leader>rc :e $MYVIMRC<CR>
 " remove search results
-nmap <leader>h :noh<CR>
-
+nmap <Leader>h :noh<CR>
 " Make sure <Esc>==<C-[>
 imap <C-[> <Esc>
 nmap <C-[> <C-L>
-
-" tab toggles to last buffer
-" nmap <Tab> :b#<CR>
-
-" exit insert mode with jk
-inoremap jk <esc>
-
+" Insert mode movement
+imap <C-H> <Left>
+imap <C-J> <Down>
+imap <C-K> <Up>
+imap <C-L> <Right>
+" swapping tabs
+nmap <Tab> :b#<CR>
+nmap <BS> :b#<CR>
 " Reformat whole document
-nmap <leader>= mzHmxgg=G`xzt`z
-
+nmap <Leader>= mzHmxgg=G`xzt`z
+" Make current file executable
+nmap <Leader>+x :!chmod +x %
 " Arrows scroll
 nmap <Down> <C-e>
 nmap <Up> <C-y>
-
 " toggle relative line numbers
-nmap <leader>er :set invrelativenumber<CR>
-
+nmap <Leader>er :set invrelativenumber<CR>
 " select last paste
-nmap <leader>v V`]
-
-" <leader>m for quickly saving a file
-nmap <leader>m :w<CR>
-
-" place delimiters around selection
+nmap <Leader>v V`]
+" jj to esc from insert mode
+inoremap jj <ESC>
+" <Leader>m for quickly saving a file
+nmap <Leader>m :w<CR>
+" place parens around selection
 vmap ,( c()<ESC>P
 vmap ,) c()<ESC>P
 vmap ,[ c[]<ESC>P
 vmap ,] c[]<ESC>P
+vmap ,{ c{}<ESC>P
+vmap ,} c{}<ESC>P
 vmap ," c""<ESC>P
 vmap ,' c''<ESC>P
 vmap ,< c<><ESC>P
 vmap ,> c<><ESC>P
-
 " Splits
 nmap <leader>sh :leftabove  vnew<CR>
 nmap <leader>sl :rightbelow vnew<CR>
 nmap <leader>sk :leftabove  new<CR>
 nmap <leader>sj :rightbelow new<CR>
-
-set splitbelow
-set splitright
-
-" Make Y more like other capitals
-noremap Y y$
-
-"""""""""""""""""""""""""""""""""
-"""Language Specific Settings""""
-"""""""""""""""""""""""""""""""""
-"" JAS
-au BufNewFile,BufRead *.jpp set filetype=c
-
-"" FORTH
-" forth syntax
-au BufNewFile,BufRead *.frt set filetype=forth
-au BufNewFile,BufRead *.fs set filetype=forth
-au BufNewFile,BufRead *.forth set filetype=forth
-
-"" C
-" Add function to Unity unit tests
-nmap <Leader>unit 0f(bywG?RUN_TEST<CR>oRUN_TEST(<ESC>pA);<ESC>,h
+" pane switching
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+nmap <C-h> <C-w>h
 
 
-""""""""""""""""""""""""
-"""Plugin Settings""""""
-""""""""""""""""""""""""
+""" Plugin Settings
 syntax on
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 filetype plugin indent on
@@ -218,97 +169,104 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
-" NOTE reavaluate this plugin
-" Plug 'majutsushi/tagbar'
-
-Plug 'benmills/vimux'
-
-"" Editing Plugins
-Plug 'vim-scripts/a.vim'
-
-Plug 'airblade/vim-rooter'
-
+" Editor Plugins
+" file explorer
 Plug 'scrooloose/nerdtree'
-
-Plug 'tc50cal/vim-terminal'
-
-" Align text
-Plug 'godlygeek/tabular'
-
-" Search
-Plug 'mileszs/ack.vim'
-
-Plug 'rust-lang/rust.vim'
-
-"" Extra displays/Information
+" switch between files
+Plug 'vim-scripts/a.vim'
+" file descriptions
+Plug 'majutsushi/tagbar'
+"" Editing Plugins
+Plug 'easymotion/vim-easymotion'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-fugitive'
-
+" Create scratch pad
+Plug 'mtth/scratch.vim'
 " Nice startup screen
 Plug 'mhinz/vim-startify'
-
-" Fast file search
+" Searching
+Plug 'jremmen/vim-ripgrep'
 Plug 'kien/ctrlp.vim'
-
+" Editing
+Plug 'mikewest/vimroom'
+Plug 'benmills/vimux'
+" Syntax
+Plug 'tpope/vim-markdown'
+Plug 'cespare/vim-toml'
 "" Color Schemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'chriskempson/base16-vim'
-Plug 'tomasr/molokai'
-Plug 'hhff/SpacegrayEighties.vim'
+"" Rust
+Plug 'rust-lang/rust.vim'
+" Zig
+Plug 'ziglang/zig.vim'
 
 call plug#end()
-
-""" Vim Diff
-nmap <leader>l :diffget LOCAL<CR>
-nmap <leader>o :diffget REMOTE<CR>
-
-" pane switching
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
-nmap <C-l> <C-w>l
-nmap <C-h> <C-w>h
 
 " Colorscheme
 colorscheme gruvbox
 
-" Startify
-let g:startify_session_dir = '~/.vim_sessions'
-
-" ACk
-" use ripgrep if available as the search tool
-if executable("rg")
-    let g:ackprg = 'rg --vimgrep --no-heading'
-endif
-
 """" Vimux
-" rerun the last command
-nnoremap <leader>r :call VimuxRunCommandInDir("!!", 0)<CR>
+nnoremap <leader>b :call VimuxRunCommand("cargo build\n", 0)<CR>
+nnoremap <leader>t :call VimuxRunCommand("cargo test\n", 0)<CR>
+nnoremap <leader>r :call VimuxRunCommand("cargo run\n", 0)<CR>
+nnoremap <leader>, :call VimuxRunCommand("!!\n", 0)<CR>
 
 """ NERDTree Settings
-map <leader>n :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>
+
+""" Colorscheme Settings
+syntax enable
+set background=dark
+
+""" Tabularize Settings
+let g:haskell_tabular = 1
+
+vmap a= :Tabularize /=<CR>
+vmap ap :Tabularize 
+
+""" Scratch settings
+nmap <Leader>es :Scratch<CR>
 
 """ Ctrl-p Settings
-map <silent> <leader>t :CtrlP()<CR>
+" map <silent> <Leader>t :CtrlP()<CR>
+noremap <leader>b<space> :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
 
 """ EasyMotion Settings
-nmap <leader>p <Plug>(easymotion-overwin-w)
+nmap <Leader>p <Plug>(easymotion-overwin-w)
 
 """ Rooter settings
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
 """ Fugitive settings
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gd :Gdiff<CR>
+nmap <Leader>gs :Gstatus<CR>
+nmap <Leader>gd :Gdiff<CR>
 
-""""""""""""""""""""""""
-"""Hex Mode Settings""""
-""""""""""""""""""""""""
-" Enter and exit HexMode
-nnoremap <leader>x :call ToggleHex()<CR>
+""" Tagbar settings
+nmap <Leader>g :TagbarToggle<CR>
 
-" ex command for toggling hex mode
+""" Language Specific Settings
+"" FORTH
+" forth syntax
+au BufNewFile,BufRead *.frt set filetype=forth
+au BufNewFile,BufRead *.fs set filetype=forth
+
+""" C/C++
+" Open cpp and h file together
+nmap <Leader>et :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+" C aliases
+imap prf printf("");<ESC>hhi
+
+
+" HexMode stuff for easy hex editing
+nnoremap <C-H> :call ToggleHex()<CR>
+inoremap <C-H> <Esc>:call ToggleHex()<CR>
+vnoremap <C-H> :<C-U>call ToggleHex()<CR>
+
+" ex command for toggling hex mode - define mapping if desired
 " command -bar Hexmode call ToggleHex()
 
 " helper function to toggle hex mode
@@ -348,4 +306,3 @@ function! ToggleHex()
   let &readonly=l:oldreadonly
   let &modifiable=l:oldmodifiable
 endfunction
-  
