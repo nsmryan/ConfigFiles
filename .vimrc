@@ -190,9 +190,11 @@ Plug 'kien/ctrlp.vim'
 " Editing
 Plug 'mikewest/vimroom'
 Plug 'benmills/vimux'
+Plug 'matze/vim-move'
 " Syntax
 Plug 'tpope/vim-markdown'
 Plug 'cespare/vim-toml'
+
 "" Color Schemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
@@ -204,32 +206,32 @@ Plug 'ziglang/zig.vim'
 
 call plug#end()
 
-" Colorscheme
+"" Colorscheme
 colorscheme gruvbox
 
-"""" Vimux
+""" Vimux
 nnoremap <leader>b :call VimuxRunCommand("cargo build\n", 0)<CR>
 nnoremap <leader>t :call VimuxRunCommand("cargo test\n", 0)<CR>
 nnoremap <leader>r :call VimuxRunCommand("cargo run\n", 0)<CR>
 nnoremap <leader>, :call VimuxRunCommand("!!\n", 0)<CR>
 
-""" NERDTree Settings
+"" NERDTree Settings
 map <Leader>n :NERDTreeToggle<CR>
 
-""" Colorscheme Settings
+"" Colorscheme Settings
 syntax enable
 set background=dark
 
-""" Tabularize Settings
+"" Tabularize Settings
 let g:haskell_tabular = 1
 
 vmap a= :Tabularize /=<CR>
 vmap ap :Tabularize 
 
-""" Scratch settings
+"" Scratch settings
 nmap <Leader>es :Scratch<CR>
 
-""" Ctrl-p Settings
+"" Ctrl-p Settings
 " map <silent> <Leader>t :CtrlP()<CR>
 noremap <leader>b<space> :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
@@ -237,16 +239,19 @@ let g:ctrlp_custom_ignore = '\v[\/]dist$'
 """ EasyMotion Settings
 nmap <Leader>p <Plug>(easymotion-overwin-w)
 
-""" Rooter settings
+"" Rooter settings
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
-""" Fugitive settings
+"" Fugitive settings
 nmap <Leader>gs :Gstatus<CR>
 nmap <Leader>gd :Gdiff<CR>
 
-""" Tagbar settings
+"" Tagbar settings
 nmap <Leader>g :TagbarToggle<CR>
+
+""  Vim move modifier
+let g:move_key_modifier = 'C'
 
 """ Language Specific Settings
 "" FORTH
