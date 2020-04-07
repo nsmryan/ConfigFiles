@@ -1,5 +1,6 @@
 """ Editor Settings
 
+
 " set the leader for mappings
 nnoremap ,, ,
 let mapleader=","
@@ -33,8 +34,6 @@ set shortmess=a
 set clipboard=unnamed
 set go+=a
 set expandtab
-set tabstop=2
-set shiftwidth=2
 " Set font
 set gfn=Lucida_Console:h8:b:cANSI
 set wildmode=longest,list,full
@@ -104,7 +103,8 @@ nmap <Leader>s :source $MYVIMRC<CR><CR>
 " Edit vimrc
 nmap <Leader>rc :e $MYVIMRC<CR>
 " remove search results
-nmap <Leader>h :noh<CR>
+nmap <Leader>h :set hlsearch! hlsearch?<CR>
+
 " Make sure <Esc>==<C-[>
 imap <C-[> <Esc>
 nmap <C-[> <C-L>
@@ -152,6 +152,11 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 nmap <C-h> <C-w>h
+" Make a new line
+nmap <CR> o<ESC>
+nmap <S-CR> O<ESC>
+" Quickly change current word
+nmap <space> ciw
 
 
 """ Plugin Settings
@@ -190,68 +195,69 @@ Plug 'kien/ctrlp.vim'
 " Editing
 Plug 'mikewest/vimroom'
 Plug 'benmills/vimux'
-Plug 'matze/vim-move'
+Plug 'majutsushi/tagbar'
+Plug 'inside/vim-search-pulse'
+Plug 'triglav/vim-visual-increment'
+Plug 'justinmk/vim-sneak'
+Plug 'tommcdo/vim-lion'
 " Syntax
 Plug 'tpope/vim-markdown'
 Plug 'cespare/vim-toml'
-
-"" Color Schemes
-Plug 'altercation/vim-colors-solarized'
-Plug 'morhetz/gruvbox'
-Plug 'chriskempson/base16-vim'
 "" Rust
 Plug 'rust-lang/rust.vim'
 " Zig
 Plug 'ziglang/zig.vim'
+"" Color Schemes
+Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+Plug 'chriskempson/base16-vim'
+Plug 'NLKNguyen/papercolor-theme'
 
 call plug#end()
 
-"" Colorscheme
+" Colorscheme
 colorscheme gruvbox
 
-""" Vimux
-nnoremap <leader>b :call VimuxRunCommand("cargo build\n", 0)<CR>
+"""" Vimux
 nnoremap <leader>t :call VimuxRunCommand("cargo test\n", 0)<CR>
 nnoremap <leader>r :call VimuxRunCommand("cargo run\n", 0)<CR>
 nnoremap <leader>, :call VimuxRunCommand("!!\n", 0)<CR>
 
-"" NERDTree Settings
+""" NERDTree Settings
 map <Leader>n :NERDTreeToggle<CR>
 
-"" Colorscheme Settings
+""" Colorscheme Settings
 syntax enable
 set background=dark
 
-"" Tabularize Settings
+""" Tabularize Settings
 let g:haskell_tabular = 1
 
 vmap a= :Tabularize /=<CR>
 vmap ap :Tabularize 
 
-"" Scratch settings
+""" Scratch settings
 nmap <Leader>es :Scratch<CR>
 
-"" Ctrl-p Settings
-" map <silent> <Leader>t :CtrlP()<CR>
-noremap <leader>b<space> :CtrlPBuffer<cr>
+""" Ctrl-p Settings
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
 
 """ EasyMotion Settings
 nmap <Leader>p <Plug>(easymotion-overwin-w)
 
-"" Rooter settings
+""" Rooter settings
 " if the file is not in a project, use current dir
 let g:rooter_change_directory_for_non_project_files = 'current'
 
-"" Fugitive settings
+""" Fugitive settings
 nmap <Leader>gs :Gstatus<CR>
 nmap <Leader>gd :Gdiff<CR>
 
-"" Tagbar settings
-nmap <Leader>g :TagbarToggle<CR>
+" Pulse settings
+let g:vim_search_pulse_duration = 51
 
-""  Vim move modifier
-let g:move_key_modifier = 'C'
+""" Tagbar settings
+nmap <Leader>b :TagbarToggle<CR>
 
 """ Language Specific Settings
 "" FORTH
