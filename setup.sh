@@ -1,3 +1,4 @@
+#!/bin/bash
 
 if [ ! -f ~/.vim/autoload/plug.vim ]; then
     mkdir -p ~/.vim/autoload/
@@ -15,3 +16,6 @@ if [ "$(expr substr $(uname -s) 1 7)" == "MSYS_NT" ]; then
 elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
     echo "Cygwin installation through setup.exe"
 fi
+
+source base16-gruvbox-dark-soft.sh
+
