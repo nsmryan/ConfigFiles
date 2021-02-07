@@ -1,0 +1,94 @@
+#!/usr/bin/tclsh
+
+# for sessions
+# tmux ls
+# tmux list-sessions
+
+# for windows
+# tmux list-windows -t SESSION
+
+if { [llength $argv] != 2 } {
+    puts "se SESSION WINDOW"
+    exit
+}
+
+set session [lindex $argv 0]
+set window [lindex $argv 1]
+
+set loc "~/.config/$session/$window"
+if { ![file exists "$loc/path"] } {
+    puts "$loc does not exist!"
+    exit
+}
+
+# could also use a symlink here...
+set dir [string trim [read [open "$loc/path"]]]
+
+
+proc only-names { lines splitter index } {
+    set names [list]
+    foreach line $lines {
+        if { $line == "" } {
+            continue
+        }
+        lappend names [lindex [split $line $splitter] $index]
+    }
+    return $names
+}
+
+proc tmux-sessions {} {
+    set lines [split [read [open "|tmux ls"]] "\n"]
+    set names [only-names $lines ":" 0]
+    return $names
+}
+
+proc tmux-windows { session } {
+    set lines [split [read [open "|tmux list-window -t $session"]] "\n"]
+    set names [only-names $lines " " 1]
+    set windows [list]
+    foreach name $names {
+        lappend windows [string trim $name "*-"]
+    }
+    return $windows
+}
+
+
+set sessions [tmux-sessions]
+set windows [tmux-windows $session]
+
+# create session if it doesn't exit
+# tmux new-session -d -s SESSION
+if { [lsearch -exact $sessions $session] < 0 } {
+    puts "|tmux new-session -d -s $session"
+    open "|tmux new-session -d -s $session"
+}
+
+# create window is it doesn't exist
+#tmux new-window -d -t SESSION -n WINDOW -c PATH
+puts $dir
+if { [lsearch -exact $windows $window] < 0 } {
+    # NOTE the -c DIR option doesn't seem to work within TCL for some reason,
+    # so this just sends "cd DIR" keys instead.
+    puts "|tmux new-window -d -t $session -n $window"
+    open "|tmux new-window -d -t $session -n $window"
+    puts "|tmux send-keys -t $session:$window \"cd $dir\" Enter"
+    open "|tmux send-keys -t $session:$window \"cd $dir\" Enter"
+
+    open "|tmux select-layout -t '$session:$window' tiled"
+
+    if { [file exists $loc/cmds.tcl] } {
+        source $loc/cmds.tcl
+    }
+}
+
+#tmux send-keys -t 'default:rl' 'vim README.md' Enter
+#tmux split-window -t 'default:rl' -h
+
+if { [info exists env(TMUX)] } {
+    puts "|tmux switch-client -t $session:$window"
+    open "|tmux switch-client -t $session:$window"
+} else {
+    puts "|tmux attach-session -t $session:$window"
+    open "|tmux attach-session -t $session:$window"
+}
+
