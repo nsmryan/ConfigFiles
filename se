@@ -7,24 +7,6 @@
 # for windows
 # tmux list-windows -t SESSION
 
-if { [llength $argv] != 2 } {
-    puts "se SESSION WINDOW"
-    exit
-}
-
-set session [lindex $argv 0]
-set window [lindex $argv 1]
-
-set loc "~/.config/$session/$window"
-if { ![file exists "$loc/path"] } {
-    puts "$loc does not exist!"
-    exit
-}
-
-# could also use a symlink here...
-set dir [string trim [read [open "$loc/path"]]]
-
-
 proc only-names { lines splitter index } {
     set names [list]
     foreach line $lines {
@@ -52,6 +34,38 @@ proc tmux-windows { session } {
     return $windows
 }
 
+proc tmux-send { cmd } {
+    global session window
+    open "|tmux send-keys -t $session:$window \"$cmd\" Enter"
+}
+
+proc tmux-vsplit {} {
+    global session window
+    open "|tmux split-window -t $session:$window -v"
+}
+
+proc tmux-hsplit {} {
+    global session window
+    open "|tmux split-window -t $session:$window -h"
+}
+
+if { [llength $argv] != 2 } {
+    puts "se SESSION WINDOW"
+    exit
+}
+
+set session [lindex $argv 0]
+set window [lindex $argv 1]
+
+set loc "~/.config/$session/$window"
+if { ![file exists "$loc/path"] } {
+    puts "$loc does not exist!"
+    exit
+}
+
+# could also use a symlink here...
+set dir [string trim [read [open "$loc/path"]]]
+
 
 set sessions [tmux-sessions]
 set windows [tmux-windows $session]
@@ -65,7 +79,8 @@ if { [lsearch -exact $sessions $session] < 0 } {
 
 # create window is it doesn't exist
 #tmux new-window -d -t SESSION -n WINDOW -c PATH
-puts $dir
+#tmux send-keys -t 'default:rl' 'vim README.md' Enter
+#tmux split-window -t 'default:rl' -h
 if { [lsearch -exact $windows $window] < 0 } {
     # NOTE the -c DIR option doesn't seem to work within TCL for some reason,
     # so this just sends "cd DIR" keys instead.
@@ -80,9 +95,6 @@ if { [lsearch -exact $windows $window] < 0 } {
         source $loc/cmds.tcl
     }
 }
-
-#tmux send-keys -t 'default:rl' 'vim README.md' Enter
-#tmux split-window -t 'default:rl' -h
 
 if { [info exists env(TMUX)] } {
     puts "|tmux switch-client -t $session:$window"
