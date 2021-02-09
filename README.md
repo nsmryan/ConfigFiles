@@ -4,16 +4,6 @@ ConfigFiles
 My configuration files.
 
 
-## Vim
-
-    * Download plug.vim into ~/.vim/autoload/.
-    * Open vim
-    * Run
-        * :PlugInstall
-
-## Tmux
-Clone tpm into plugins:
-
-  * git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+The intent is to just run setup.sh and get a basic setup on Linux and Windows/MSYS2.
 
 
