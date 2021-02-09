@@ -26,8 +26,13 @@ source base16-gruvbox-dark-soft.sh
 # put .vimrc in home
 cp ./.vimrc ~/
 
+# put .tmux.conf in home
+cp ./.tmux.conf ~/
+
 # install se tool
 cp se /usr/bin/
+
+mkdir -p ~/.config/
 
 # install plugins in a separate process...
 vim -c ":PlugInstall" &
