@@ -15,7 +15,7 @@ fi
 
 # detect OS and perform OS-specific commands
 if [ "$(expr substr $(uname -s) 1 7)" == "MSYS_NT" ]; then
-    pacman -S tmux --noconfirm
+    pacman -S tmux ctags --noconfirm
 elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
     echo "Cygwin installation through setup.exe"
 fi
