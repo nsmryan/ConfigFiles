@@ -127,8 +127,8 @@ nmap <Up> <C-y>
 nmap <Leader>er :set invrelativenumber<CR>
 " select last paste
 nmap <Leader>v V`]
-" jj to esc from insert mode
-inoremap jj <ESC>
+" jk to esc from insert mode
+inoremap jk <ESC>
 " <Leader>m for quickly saving a file
 nmap <Leader>m :w<CR>
 " place parens around selection
