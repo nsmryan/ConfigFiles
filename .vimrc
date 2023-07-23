@@ -74,6 +74,12 @@ set guioptions-=T
 " Add bottom scrollbar
 set guioptions+=b
 
+" Detector header files as c source, not cpp.
+augroup project
+  autocmd!
+  autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+augroup END
+
 " Alt-Space is System menu
 if has("gui")
         noremap <M-Space> :simalt ~<CR>
@@ -179,12 +185,15 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'scrooloose/nerdtree'
 " switch between files
 Plug 'vim-scripts/a.vim'
+" Maximum pane
+Plug 'szw/vim-maximizer'
 " file descriptions
 Plug 'majutsushi/tagbar'
 "" Editing Plugins
 Plug 'easymotion/vim-easymotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-fugitive'
+Plug 'machakann/vim-highlightedyank'
 " Create scratch pad
 Plug 'mtth/scratch.vim'
 " Nice startup screen
@@ -212,7 +221,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 Plug 'chriskempson/base16-vim'
 Plug 'NLKNguyen/papercolor-theme'
-
+" Manage tags
+Plug 'ludovicchabant/vim-gutentags'
 call plug#end()
 
 " Colorscheme
@@ -238,6 +248,9 @@ vmap ap :Tabularize
 
 """ Scratch settings
 nmap <Leader>es :Scratch<CR>
+
+""" Maximizer Toggle
+nmap <Leader>z :MaximizerToggle<CR>
 
 """ Ctrl-p Settings
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
