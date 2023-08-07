@@ -254,6 +254,7 @@ nmap <Leader>z :MaximizerToggle<CR>
 
 """ Ctrl-p Settings
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
+let g:ctrlp_max_files=0
 
 """ EasyMotion Settings
 nmap <Leader>p <Plug>(easymotion-overwin-w)
